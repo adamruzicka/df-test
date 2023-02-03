@@ -70,3 +70,6 @@ group :test do
   gem "selenium-webdriver"
   gem "webdrivers"
 end
+
+gem 'dynflow', '~> 1.6'
+gem 'get_process_mem'

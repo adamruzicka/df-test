@@ -4,6 +4,7 @@ require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
+require 'sequel'
 Bundler.require(*Rails.groups)
 
 module DfTest
@@ -18,5 +19,21 @@ module DfTest
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    #
+    config.eager_load_paths << Rails.root.join("app/lib")
+    # Use Dynflow as the backend for ActiveJob
+    config.active_job.queue_adapter = :dynflow
+
+    config.after_initialize do
+      init_dynflow
+    end
+
+    def dynflow
+      @dynflow ||= ::Dynflow::Rails.new.tap(&:require!)
+    end
+
+    def init_dynflow
+      dynflow.eager_load_actions!
+    end
   end
 end
